@@ -1,0 +1,52 @@
+name: build-with-muon
+description: A github action that installs a specific version of muon.
+author: Stone Tickle <lattis@mochiro.moe>
+
+branding:
+  icon: package
+  color: gren
+
+# Define your inputs here.
+inputs:
+  version:
+    description: The muon version to use.  Can be a string like 0.3.0, a git sha, or edge.
+    required: true
+    default: edge
+  git_url:
+    description: The url to git clone muon from
+    required: true
+    default: https://github.com/muon-build/muon
+
+runs:
+  using: composite
+  steps:
+    - name: install muon
+      shell: bash
+      run: |
+        set -eux
+
+        cd "$GITHUB_ACTION_PATH"
+
+        if [ "$INPUTS_VERSION" = edge ]; then
+          git clone --depth=1 "$INPUTS_GIT_URL" muon
+          cd muon
+        else
+          mkdir muon
+          cd muon
+          git -c init.defaultBranch=master init
+          git remote add origin "$INPUTS_GIT_URL"
+          git fetch --depth 1 origin "$INPUTS_VERSION"
+          git checkout "$INPUTS_VERSION"
+        fi
+
+        ./bootstrap.sh build
+        build/muon-bootstrap setup build
+        build/muon-bootstrap -C build samu
+
+        export DESTDIR="$GITHUB_ACTION_PATH"
+        build/muon-bootstrap -C build install
+        echo "$DESTDIR/usr/local/bin" >> $GITHUB_PATH
+      env:
+        INPUTS_VERSION: ${{ inputs.version }}
+        INPUTS_GIT_URL: ${{ inputs.git_url }}
+        GITHUB_ACTION_PATH: ${{ github.action_path }}

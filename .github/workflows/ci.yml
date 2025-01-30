@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  test-action:
+    strategy:
+      matrix:
+        config:
+          - image: ubuntu-latest
+          - image: macos-latest
+    name: ${{ matrix.config.image }}
+    runs-on: ${{ matrix.config.image }}
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Run action
+        id: test-action
+        uses: ./
+
+      - name: Check muon is installed
+        id: output
+        run: muon version
