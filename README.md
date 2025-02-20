@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Install muon
-        uses: muon-build/build-with-muon@v1
+        uses: muon-build/build-with-muon@v2
 
       - name: Checkout
         uses: actions/checkout@v4
