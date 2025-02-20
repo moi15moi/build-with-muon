@@ -6,7 +6,6 @@ branding:
   icon: package
   color: gren
 
-# Define your inputs here.
 inputs:
   version:
     description: The muon version to use.  Can be a string like 0.3.0, a git sha, or edge.
@@ -27,7 +26,10 @@ runs:
 
         cd "$GITHUB_ACTION_PATH"
 
-        if [ "$INPUTS_VERSION" = edge ]; then
+        if [[ "$INPUTS_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]$ ]]; then
+          git clone --branch "$INPUTS_VERSION" --depth=1 $INPUTS_GIT_URL
+          cd muon
+        elif [[ "$INPUTS_VERSION" = edge ]]; then
           git clone --depth=1 "$INPUTS_GIT_URL" muon
           cd muon
         else

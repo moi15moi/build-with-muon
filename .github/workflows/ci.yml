@@ -15,11 +15,17 @@ jobs:
   test-action:
     strategy:
       matrix:
-        config:
-          - image: ubuntu-latest
-          - image: macos-latest
-    name: ${{ matrix.config.image }}
-    runs-on: ${{ matrix.config.image }}
+        image:
+          - ubuntu-latest
+          - macos-latest
+
+        # Test the 3 cases for version
+        version:
+          - edge
+          - 6328c3d69f2bc0ae8a8b5903cb36fe4b46b702c4
+          - 0.4.0
+    name: ${{ matrix.image }}/${{ matrix.version }}
+    runs-on: ${{ matrix.image }}
 
     steps:
       - name: Checkout
@@ -29,6 +35,8 @@ jobs:
       - name: Run action
         id: test-action
         uses: ./
+        with:
+          version: ${{ matrix.version }}
 
       - name: Check muon is installed
         id: output
