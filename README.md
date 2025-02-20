@@ -8,7 +8,7 @@ Add the following step to your workflow:
 
 ```yml
 - name: Install muon
-  uses: muon-build/build-with-muon@v1
+  uses: muon-build/build-with-muon@v2
   with:
     version: edge # optional, specify a git tag or sha, defaults to edge
     git_url: "..." # optional, specify a different git url to clone from
