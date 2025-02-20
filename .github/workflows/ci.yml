@@ -18,6 +18,7 @@ jobs:
         image:
           - ubuntu-latest
           - macos-latest
+          - windows-latest
 
         # Test the 3 cases for version
         version:
