@@ -22,7 +22,7 @@ inputs:
   bootstrap:
     description: 'Possible choice: posix, windows'
     required: false
-    default: ''
+    default: 'windows'
 
 runs:
   using: composite
@@ -65,7 +65,7 @@ runs:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
         INPUTS_CC: ${{ inputs.CC }}
     - name: bootstrap-windows
-      if: ${{ runner.os == 'Windows' && inputs.bootstrap == 'posix' }}
+      if: ${{ runner.os == 'Windows' && inputs.bootstrap == 'windows' }}
       shell: cmd
       run: |
         @echo on
