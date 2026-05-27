@@ -58,7 +58,7 @@ runs:
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
     - name: bootstrap-windows
-      if: ${{ runner.os == 'Windows' && (inputs.CC != 'gcc' && inputs.CC != 'clang')) }}
+      if: ${{ runner.os == 'Windows' && (inputs.CC != 'gcc' && inputs.CC != 'clang') }}
       shell: cmd
       run: |
         @echo on
