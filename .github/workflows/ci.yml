@@ -71,6 +71,7 @@ jobs:
 
       - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
+        id: msys2
         with:
           msystem: ${{ matrix.msys2_msystem }}
           pacboy: >-
@@ -80,7 +81,7 @@ jobs:
         uses: ./
         with:
           version: ${{ matrix.version }}
-          cc: ${{ matrix.cc }}
+          cc: ${{ steps.msys2.outputs.msys2-location }}\bin\${{ matrix.cc }}.exe
 
       - name: Check muon is installed
         id: output
