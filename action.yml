@@ -17,7 +17,10 @@ inputs:
     default: https://github.com/muon-build/muon
   CC:
     description: TODO
-    type: string
+    required: false
+    default: ''
+  bootstrap:
+    description: 'Possible choice: posix, windows'
     required: false
     default: ''
 
@@ -47,7 +50,7 @@ runs:
         INPUTS_GIT_URL: ${{ inputs.git_url }}
         GITHUB_ACTION_PATH: ${{ github.action_path }}
     - name: bootstrap-posix
-      if: ${{ runner.os != 'Windows' || (runner.os == 'Windows' && (inputs.CC == 'gcc' || inputs.CC == 'clang')) }}
+      if: ${{ runner.os != 'Windows' || (runner.os == 'Windows' && inputs.bootstrap == 'posix') }}
       shell: bash
       run: |
         set -eux
@@ -62,7 +65,7 @@ runs:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
         INPUTS_CC: ${{ inputs.CC }}
     - name: bootstrap-windows
-      if: ${{ runner.os == 'Windows' && (inputs.CC != 'gcc' && inputs.CC != 'clang') }}
+      if: ${{ runner.os == 'Windows' && inputs.bootstrap == 'posix' }}
       shell: cmd
       run: |
         @echo on
