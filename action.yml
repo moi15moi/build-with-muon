@@ -15,13 +15,6 @@ inputs:
     description: The url to git clone muon from
     required: true
     default: https://github.com/muon-build/muon
-  msys2_msystem:
-    description: |
-      If the runner OS is Windows, a MSYS2 runtime can be selected (mingw64, ucrt64, clang64, etc...).
-      If not set, Windows native is used (not MSYS2 environment).
-    type: string
-    required: false
-    default: ''
 
 runs:
   using: composite
@@ -49,8 +42,8 @@ runs:
         INPUTS_GIT_URL: ${{ inputs.git_url }}
         GITHUB_ACTION_PATH: ${{ github.action_path }}
     - name: bootstrap-posix
-      if: ${{ runner.os != 'Windows' || (runner.os == 'Windows' && inputs.msys2_msystem != '') }}
-      shell: ${{ (matrix.os == 'windows-latest' && 'msys2 {0}' || 'bash') }}
+      if: ${{ runner.os != 'Windows' }}
+      shell: bash
       run: |
         set -eux
         cd "$GITHUB_ACTION_PATH/muon"
@@ -59,8 +52,8 @@ runs:
         build/muon-bootstrap -C build samu
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
-    - name: bootstrap-windows-msvc
-      if: ${{ runner.os == 'Windows' && inputs.msys2_msystem == '' }}
+    - name: bootstrap-windows
+      if: ${{ runner.os == 'Windows' }}
       shell: cmd
       run: |
         @echo on
