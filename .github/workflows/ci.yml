@@ -82,6 +82,7 @@ jobs:
         with:
           version: ${{ matrix.version }}
           cc: ${{ steps.msys2.outputs.msys2-location }}\bin\${{ matrix.cc }}.exe
+          bootstrap: posix
 
       - name: Check muon is installed
         id: output
