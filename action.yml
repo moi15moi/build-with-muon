@@ -51,12 +51,16 @@ runs:
       shell: bash
       run: |
         set -eux
+        if [[ "$INPUTS_CC" != "" ]]; then
+          export CC="$INPUTS_CC"
+        fi
         cd "$GITHUB_ACTION_PATH/muon"
         ./bootstrap.sh build
         build/muon-bootstrap setup build
         build/muon-bootstrap -C build samu
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
+        INPUTS_CC: ${{ inputs.CC }}
     - name: bootstrap-windows
       if: ${{ runner.os == 'Windows' && (inputs.CC != 'gcc' && inputs.CC != 'clang') }}
       shell: cmd

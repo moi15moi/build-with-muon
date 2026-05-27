@@ -52,6 +52,10 @@ jobs:
           - 6328c3d69f2bc0ae8a8b5903cb36fe4b46b702c4
           - 0.4.0
 
+        msys2_msystem:
+          - ucrt64
+          - clang64
+
         include:
           - msys2_msystem: ucrt64
             cc: gcc
