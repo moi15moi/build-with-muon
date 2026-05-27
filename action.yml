@@ -15,6 +15,11 @@ inputs:
     description: The url to git clone muon from
     required: true
     default: https://github.com/muon-build/muon
+  CC:
+    description: TODO
+    type: string
+    required: false
+    default: ''
 
 runs:
   using: composite
@@ -42,7 +47,7 @@ runs:
         INPUTS_GIT_URL: ${{ inputs.git_url }}
         GITHUB_ACTION_PATH: ${{ github.action_path }}
     - name: bootstrap-posix
-      if: ${{ runner.os != 'Windows' }}
+      if: ${{ runner.os != 'Windows' || (runner.os == 'Windows' && (inputs.CC == 'gcc' || inputs.CC == 'clang')) }}
       shell: bash
       run: |
         set -eux
@@ -53,7 +58,7 @@ runs:
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
     - name: bootstrap-windows
-      if: ${{ runner.os == 'Windows' }}
+      if: ${{ runner.os == 'Windows' && (inputs.CC != 'gcc' && inputs.CC != 'clang')) }}
       shell: cmd
       run: |
         @echo on
